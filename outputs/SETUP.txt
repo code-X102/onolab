@@ -1,0 +1,9 @@
+ONOLAB ACADEMY — START HERE
+
+1. Unzip onolab-korean-lms.zip
+2. Upload the project files to a new GitLab repository.
+3. Import that repository into Vercel as a Next.js project.
+4. Before inviting students, create Supabase, run supabase/schema.sql, configure authentication, and set the environment variables from .env.example in Vercel.
+5. Set GEMINI_API_KEY in Vercel to enable Korean writing feedback. Without Supabase credentials, the app opens in a local demo preview. With Supabase configured, students must sign in and writing feedback is linked to their student account.
+
+See README.md for setup notes and current integration limits. The Onolab / 어휘망 reference share links could not be opened from this workspace, so the app includes an integration placeholder instead of assuming an API contract.

@@ -1,57 +1,35 @@
-# 언어랩 — Korean Language & Culture Institute
+# Onolab Academy — Korean writing LMS
 
-A responsive multilingual website prototype for a Korean-language teaching and applied-linguistics research institute.
+A Vercel-ready Next.js foundation for a writing-first Korean learning platform for Sri Lankan school-age and adult learners. Includes a responsive student workspace, teacher overview, stylus-friendly Hangul canvas, ruled notebook, a Hangul-to-TOPIK 3 curriculum map, TOPIK 1/2/3 model-paper entry points, Gemini feedback API, Supabase schema with role-aware row-level security, and a vocabulary-app connection placeholder.
 
-## Preview
+## Run locally
 
-The site is a dependency-free static application. Run it with any local web server:
+1. Install Node.js 20 or newer.
+2. Copy `.env.example` to `.env.local` (the app runs in demo mode without credentials).
+3. Run `npm install` then `npm run dev` and open `http://localhost:3000`.
+4. Use the Student/Teacher switch in the top bar to preview both workspaces. The profile name can be changed from its small settings button.
 
-```bash
-python3 -m http.server 4173 --bind 0.0.0.0
-```
+## Connect student accounts and storage
 
-Then open `http://localhost:4173`.
+1. Create a Supabase project and run [`supabase/schema.sql`](supabase/schema.sql) in its SQL Editor.
+2. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to `.env.local` and Vercel Project Settings.
+3. Enable an authentication method in Supabase. Configure a student sign-up flow to provide `display_name`; the database creates a student profile and ONA student code automatically.
+4. Promote staff by changing their `profiles.role` to `teacher` or `admin` from the Supabase dashboard. Do not let users choose their own staff role.
 
-## Included
+The current interface is a product preview. Supabase schema and RLS are included, while wiring login, class roster CRUD, durable writing uploads, lesson authoring and actual exam scoring are the next integration layer. Do not store handwriting images in a database text field for production; use private object storage with signed URLs and retention rules.
 
-- Original editorial visual system for language and linguistics (no bioscience or laboratory imagery)
-- 10 linked public sections: Home, Programs, Research, Courses, Videos, Materials, Quiz, Assignments, Culture, About
-- 10 interface languages: English, Korean, Sinhala, Vietnamese, Nepali, Hindi, Chinese, Japanese, Spanish, German
-- Course filters and search
-- Caption/transcript video lesson experience
-- Downloadable material samples
-- Interactive five-question Korean quiz with scoring
-- Assignment upload workflow (prototype stores file metadata only)
-- Contact form interaction
-- Responsive desktop/mobile navigation
-- Accessible semantic structure, skip link, reduced-motion support, keyboard controls
-- Admin dashboard with overview, CMS, learner submissions, research pipeline, and settings
-- Browser-local persistence for language, demo login, submissions, and custom content
+## Enable Gemini writing feedback
 
-## Demo admin
+Set `GEMINI_API_KEY` as a server-only Vercel environment variable. Optionally set `GEMINI_MODEL`. The `/api/feedback` endpoint accepts a typed sentence or a base64 PNG handwriting sample and returns simple English feedback. Without a key it returns demo feedback. Never expose the key through a `NEXT_PUBLIC_` variable. The current canvas is ready for touch and stylus; connect its exported image to this route to analyze handwriting.
 
-1. Choose **Sign in**.
-2. Select **Institute admin**.
-3. Use the prefilled demo credentials.
+## Deploy to Vercel
 
-The prototype accepts the demo form locally. It does not include secure production authentication.
+Push this folder to GitLab, import the repository in Vercel, select Next.js, set the environment variables above, and deploy. The `npm run build` command is used automatically. Keep `.env.local` out of Git; `.gitignore` already excludes environment files.
 
-## Production requirements
+## Connect 어휘망
 
-Before public launch, connect the interface to a secure backend and database. Add:
+The dashboard contains the integration entry point and `word_links` table. Add the vocabulary app's documented OAuth/deep-link URL and callback contract when available. The shared reference was not accessible in this environment, so no undocumented API is assumed.
 
-- Server-side authentication, encrypted sessions, role-based access control, password reset, and MFA for administrators
-- Secure video hosting, subtitle tracks, transcripts, and progress analytics
-- Object storage and malware scanning for assignment uploads
-- Database-backed courses, students, grades, content, and translation versions
-- Email delivery and consent/privacy workflows
-- Native-speaker editorial review of all ten language versions
-- Formal WCAG 2.2 accessibility and security testing
-- Real institute contact details, legal pages, domain, analytics consent, and deployment configuration
+## Learning content
 
-## Files
-
-- `index.html` — application shell and metadata
-- `styles.css` — full responsive design system
-- `app.js` — routing, localization, pages, interactions, quiz, assignment flow, and admin prototype
-- `assets/language-bridge.jpg` — custom editorial hero image
+The curriculum map is a starter outline, not a complete licensed TOPIK question bank. Add teacher-authored lessons and original mock-paper questions before using this with a class. Do not copy official exam questions without permission.
